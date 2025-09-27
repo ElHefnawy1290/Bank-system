@@ -22,7 +22,7 @@ public class AccountUtils {
 
         int randNumber = (int) Math.floor(Math.random() * (max-min+1) + min);
 
-        // convert the current and random number to strings, then concatenate them
+        // convert the current year and random number to strings, then concatenate them
 
         String year = String.valueOf(currentYear);
         String randomNumber = String.valueOf(randNumber);
