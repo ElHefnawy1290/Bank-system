@@ -131,4 +131,38 @@ public class UserServiceImpl implements UserService {
                         .build())
                 .build();
     }
+
+    @Override
+    public BankResponse debitAccount(CreditDebitRequest creditDebitRequest) {
+        // Check if the Account exist
+        // Check if the money needed to withdraw is less than or equal the money in the account
+        Boolean isAccountExist = userRepository.existsByAccountNumber(creditDebitRequest.getAccountNumber());
+        if(!isAccountExist){
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.ACCOUNT_NOT_EXIST_CODE)
+                    .responseMessage(AccountUtils.ACCOUNT_NOT_EXIST_MESSAGE)
+                    .accountInfo(null)
+                    .build();
+        }
+
+        User userToDebit = userRepository.findByAccountNumber(creditDebitRequest.getAccountNumber());
+        if(userToDebit.getAccountBalance().compareTo(creditDebitRequest.getAmount()) < 0) {
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.INSUFFICIENT_BALANCE_CODE)
+                    .responseMessage(AccountUtils.INSUFFICIENT_BALANCE_MESSAGE)
+                    .accountInfo(null)
+                    .build();
+        }
+        userToDebit.setAccountBalance(userToDebit.getAccountBalance().subtract(creditDebitRequest.getAmount()));
+        userRepository.save(userToDebit);
+        return BankResponse.builder()
+                .responseCode(AccountUtils.ACCOUNT_DEBIT_SUCCESS)
+                .responseMessage(AccountUtils.ACCOUNT_DEBIT_SUCCESS_MESSAGE)
+                .accountInfo(AccountInfo.builder()
+                        .accountName(userToDebit.getFirstName() + " " + userToDebit.getLastName())
+                        .accountNumber(userToDebit.getAccountNumber())
+                        .accountBalance(userToDebit.getAccountBalance())
+                        .build())
+                .build();
+    }
 }
