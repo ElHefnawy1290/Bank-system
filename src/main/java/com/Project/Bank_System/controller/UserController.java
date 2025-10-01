@@ -1,9 +1,6 @@
 package com.Project.Bank_System.controller;
 
-import com.Project.Bank_System.dto.BankResponse;
-import com.Project.Bank_System.dto.CreditDebitRequest;
-import com.Project.Bank_System.dto.EnquiryRequest;
-import com.Project.Bank_System.dto.UserRequest;
+import com.Project.Bank_System.dto.*;
 import com.Project.Bank_System.service.impl.UserService;
 import jakarta.persistence.PostRemove;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +36,11 @@ public class UserController {
     @PostMapping("debit")
     public BankResponse debitAccount(@RequestBody CreditDebitRequest creditDebitRequest){
         return userService.debitAccount(creditDebitRequest);
+    }
+
+    @PostMapping("transfer")
+    public BankResponse transfer(@RequestBody TransferRequest transferRequest){
+        return userService.transfer(transferRequest);
     }
 
 }
