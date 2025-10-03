@@ -52,8 +52,6 @@ public class BankStatement {
                 .filter(transaction -> !transaction.getCreatedAt().isAfter(end)).toList();
 
         User user = userRepository.findByAccountNumber(accountNumber);
-        // **** ADD THIS ONE LINE RIGHT HERE ****
-        System.out.println("--- CHECKING USER OBJECT --- User found: " + user);
         String customerName = user.getFirstName() + " " + user.getLastName();
 
         Rectangle statementSize = PageSize.A4;
